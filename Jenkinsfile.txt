@@ -1,0 +1,26 @@
+pipeline {
+    agent { label 'master' }
+    tools {
+        maven 'M3'
+    }
+    stages {
+       stage('clone repo and clean it') {
+          steps {
+              bat  "@RD /S /Q Maven-project-demo-jenkins"
+              bat "git clone  https://github.com/ajieshmon/Maven-project-demo-jenkins.git"
+              bat  "mvn clean -f  Maven-project-demo-jenkins"
+          }
+       }
+       stage('Test') {
+          steps {
+              bat  "mvn test -f  Maven-project-demo-jenkins"
+          }
+       }
+       
+        stage('Deploy') {
+          steps {
+              bat  "mvn package -f  Maven-project-demo-jenkins"
+          }
+       }
+    }
+}
